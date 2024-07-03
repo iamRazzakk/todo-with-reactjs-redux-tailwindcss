@@ -1,8 +1,10 @@
 // import { useAppSelector } from "@/redux/hook";
+import { useGetTodosQuery } from "@/redux/api/api";
 import AddTodoModal from "./AddTodoModal";
 import TodoCard from "./TodoCard";
 import TodoFielter from "./TodoFielter";
-import { useGetTodosQuery } from "@/redux/api/api";
+import { error } from "console";
+// import TodoFielter from "./TodoFielter";
 
 const TodoContainer = () => {
   // from local state
@@ -12,15 +14,20 @@ const TodoContainer = () => {
 
   // from server
   const { data: todos, isLoading, isError } = useGetTodosQuery(undefined);
-  const sortingTodo = [...todos].sort(
-    (a, b) => Number(a.isCompleted) - Number(b.isCompleted)
-  );
+
   if (isLoading) {
-    return <p>Loadin....</p>;
+    return <p>Loading...</p>; // Corrected loading text
   }
-  // if (isError) {
-  //   return <p>Error</p>;
-  // }
+  if (isError) {
+    console.error("Error fetching todos:", error);
+    return <p>Error</p>;
+  }
+
+  // Check if todos is defined before sorting
+  const sortedTodos = todos
+    ? [...todos].sort((a, b) => Number(a.isCompleted) - Number(b.isCompleted))
+    : [];
+
   return (
     <div>
       <div className="flex justify-between mb-5">
@@ -29,8 +36,8 @@ const TodoContainer = () => {
       </div>
       <div className="bg-primary-gradient w-full h-[500px] rounded-xl p-[5px] ">
         <div className="bg-white p-5 w-full h-full rounded-lg space-y-3">
-          {sortingTodo?.map((item) => (
-            <TodoCard key={item.id} {...item} />
+          {sortedTodos.map((item) => (
+            <TodoCard key={item?.id} {...item} />
           ))}
         </div>
       </div>
@@ -39,4 +46,3 @@ const TodoContainer = () => {
 };
 
 export default TodoContainer;
-// 
