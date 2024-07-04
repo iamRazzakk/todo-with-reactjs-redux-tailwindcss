@@ -13,22 +13,32 @@ import { Button } from "../ui/button";
 import { FormEvent, useState } from "react";
 import { useAppDispatch } from "@/redux/hook";
 import { addTodo } from "@/redux/features/todoSlice";
+import { useAddTodosMutation } from "@/redux/api/api";
 
 const AddTodoModal = () => {
   const [task, setTask] = useState("");
   const [description, setDescription] = useState("");
-  const dispatch = useAppDispatch();
+  // ! For local server
+  // const dispatch = useAppDispatch();
+
+  // *for server
+  const [addTodo, { isLoading, isError, isSuccess }] = useAddTodosMutation();
+  console.log(isLoading, isError, isSuccess);
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
-    const randomString = Math.random().toString(32).substring(2, 7);
+    // const randomString = Math.random().toString(32).substring(2, 7);
     const taskDetails = {
-      id: randomString,
+      // id: randomString,
       title: task,
       description: description,
+      // priority
     };
     // console.log(taskDetails);
-    dispatch(addTodo(taskDetails));
+    // ! for local server
+    // dispatch(addTodo(taskDetails));
+    // * For server
+    addTodo(taskDetails);
   };
 
   return (

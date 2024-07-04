@@ -3,7 +3,6 @@ import { useGetTodosQuery } from "@/redux/api/api";
 import AddTodoModal from "./AddTodoModal";
 import TodoCard from "./TodoCard";
 import TodoFielter from "./TodoFielter";
-import { error } from "console";
 // import TodoFielter from "./TodoFielter";
 
 const TodoContainer = () => {
@@ -19,8 +18,7 @@ const TodoContainer = () => {
     return <p>Loading...</p>; // Corrected loading text
   }
   if (isError) {
-    console.error("Error fetching todos:", error);
-    return <p>Error</p>;
+    return <p>Error, error.message</p>;
   }
 
   // Check if todos is defined before sorting
